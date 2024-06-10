@@ -185,3 +185,57 @@ func TestJsonEncodeDecode(t *testing.T) {
 		t.Errorf("expected decoded set to be equal to original set")
 	}
 }
+
+func TestSearchOne(t *testing.T) {
+	s := New(1, 2, 3, 4, 5)
+
+	found, value := s.SearchOne(func(v int) bool {
+		return v%2 == 0
+	})
+
+	if !found || (value != 2 && value != 4) {
+		t.Errorf("Expected one even number, got %v", value)
+	}
+
+	found, value = s.SearchOne(func(v int) bool {
+		return v > 5
+	})
+
+	if found {
+		t.Errorf("Expected no number greater than 5, but found %v", value)
+	}
+}
+
+func TestSearchAll(t *testing.T) {
+	s := New(1, 2, 3, 4, 5)
+
+	results := s.SearchAll(func(v int) bool {
+		return v%2 == 0
+	})
+
+	expected := []int{2, 4}
+	if len(results) != len(expected) {
+		t.Errorf("Expected %v, got %v", expected, results)
+	}
+
+	for _, v := range results {
+		found := false
+		for _, e := range expected {
+			if v == e {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("Unexpected result %v", v)
+		}
+	}
+
+	results = s.SearchAll(func(v int) bool {
+		return v > 5
+	})
+
+	if len(results) != 0 {
+		t.Errorf("Expected no numbers greater than 5, but found %v", results)
+	}
+}

@@ -148,3 +148,23 @@ func (s *Set[T]) JsonDecode(data []byte) error {
 	s.Add(slice...)
 	return nil
 }
+
+func (s *Set[T]) SearchOne(f func(v T) bool) (bool, T) {
+	var null T
+	for v := range s.m {
+		if f(v) {
+			return true, v
+		}
+	}
+	return false, null
+}
+
+func (s *Set[T]) SearchAll(f func(v T) bool) []T {
+	var res []T
+	for v := range s.m {
+		if f(v) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
