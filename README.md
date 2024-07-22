@@ -1,5 +1,3 @@
-# goset
+deprecated
 
-```bash
-go get github.com/shenzhencenter/goset
-```
+https://github.com/emirpasic/gods
